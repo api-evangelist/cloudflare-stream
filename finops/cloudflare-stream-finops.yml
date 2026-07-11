@@ -1,0 +1,92 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Cloudflare Stream
+providerId: cloudflare-stream
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Video
+- Streaming
+- Media
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Cloudflare Stream spend. Stream bills on two usage dimensions with
+  no per-request API fee: storage at 5 USD per 1,000 minutes of video stored
+  (prepaid, in increments) and delivery at 1 USD per 1,000 minutes delivered
+  (post-paid, on minutes watched). Encoding, the built-in player, and HLS/DASH
+  delivery are included. Live and on-demand share the same model, so the primary
+  cost drivers are how many minutes you retain in the library and how many minutes
+  viewers actually watch. Committed-volume Enterprise agreements offer negotiated
+  rates. A related Media Transformations feature bills separately per unique
+  transformation operation.
+notes: >-
+  Per-unit rates are grounded from the Cloudflare Stream pricing page as of the
+  review date. The dominant, most variable cost is delivery (minutes watched);
+  storage is a more predictable prepaid line. Verify current rates on the pricing
+  page during reconciliation.
+sources:
+- https://developers.cloudflare.com/stream/pricing/
+- https://www.cloudflare.com/products/cloudflare-stream/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Cloudflare
+serviceCategory: Media and Video Streaming
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+meters:
+- name: minutes_stored
+  description: Minutes of video stored in the Stream library, billed prepaid per 1,000 minutes.
+  unit: minutes
+  aggregation: sum
+  dimensions:
+  - account
+  - video
+- name: minutes_delivered
+  description: Minutes of video watched (on-demand and live), billed post-paid per 1,000 minutes.
+  unit: minutes
+  aggregation: sum
+  dimensions:
+  - account
+  - video
+  - country
+- name: transformation_operations
+  description: Unique Media Transformations operations, billed separately per 1,000 monthly unique operations.
+  unit: operations
+  aggregation: sum
+  dimensions:
+  - account
+focusColumns:
+  ServiceName: Cloudflare Stream
+  ServiceCategory: Media and Video Streaming
+  ProviderName: Cloudflare
+  PublisherName: Cloudflare
+  InvoiceIssuerName: Cloudflare
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+principles:
+- name: Visibility
+  description: Track minutes stored and minutes delivered per video; delivery (minutes watched) is the most variable line and should be monitored by video and audience.
+- name: Allocation
+  description: Tag or name videos and live inputs per workload or team so stored and delivered minutes map to internal cost centers.
+- name: Optimization
+  description: Delete or expire unused recordings to cut storage; use signed URLs and allowed origins to prevent unwanted delivery; right-size retention of live recordings.
+- name: Accountability
+  description: Assign owners per video library or live channel and review monthly stored and delivered minutes against budget and any Enterprise commitment.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

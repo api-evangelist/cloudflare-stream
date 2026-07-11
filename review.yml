@@ -1,0 +1,137 @@
+aid: cloudflare-stream
+name: Cloudflare Stream
+review:
+  question: Does Cloudflare Stream expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-11'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Cloudflare Stream's own public API surface
+    is request/response REST over HTTPS under
+    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream. Stream does
+    have an event-push mechanism - a single per-account webhook that POSTs a signed
+    notification when a video finishes processing or errors - but that is
+    server-to-endpoint HTTP, not a WebSocket. The media transports that carry the
+    actual video (RTMPS and SRT ingest, HLS and DASH delivery, and the WebRTC /
+    WHIP / WHEP live beta) are streaming media protocols negotiated out of band,
+    not a client WebSocket messaging API. There is no bidirectional WebSocket
+    surface on Stream's own API to model in AsyncAPI.
+findings:
+  summary: |
+    Cloudflare Stream does not publish a documented public WebSocket API.
+    Cloudflare Stream is the video streaming, hosting, and live-video product from
+    Cloudflare. Its programmatic control plane is a Bearer-token REST API served
+    under https://api.cloudflare.com/client/v4/accounts/{account_id}/stream,
+    covering video uploads (direct, TUS resumable, copy-from-URL, direct creator
+    uploads, clips, audio tracks), live inputs over RTMPS and SRT with simulcast
+    outputs, captions (uploaded and AI-generated), signed-URL keys and per-video
+    tokens, a single per-account webhook, and storage usage. All of it is
+    request/response REST over HTTPS. Live ingest and playback use streaming media
+    protocols (RTMPS, SRT, HLS, DASH) and a WebRTC-based WHIP/WHEP live beta that
+    exchanges SDP over HTTPS - none of which is a documented client WebSocket
+    (ws:// or wss://) messaging API. Event notifications are delivered by an
+    outbound HTTP webhook, not a WebSocket.
+  openSource: |
+    Cloudflare Stream is a proprietary, fully managed Cloudflare service; it is not
+    open source and is not self-hostable. Cloudflare publishes open-source client
+    SDKs and helper libraries (for example the Stream Player and the general
+    cloudflare-typescript, cloudflare-go, and cloudflare-python SDKs that include
+    Stream resources), but the Stream service itself runs only on Cloudflare's
+    network. Access requires a Cloudflare account and an API token.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.cloudflare.com/client/v4
+      documented: true
+      note: Stream control plane under /accounts/{account_id}/stream. Bearer API token auth.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: One per-account webhook POSTs a signed notification on video ready/error. Outbound HTTP, not WebSocket.
+    - protocol: RTMPS
+      scheme: rtmps
+      documented: true
+      note: Live ingest into a live input. Streaming media protocol, not a client API.
+    - protocol: SRT
+      scheme: srt
+      documented: true
+      note: Alternative live ingest into a live input. Streaming media protocol, not a client API.
+    - protocol: HLS/DASH
+      scheme: https
+      documented: true
+      note: Adaptive-bitrate playback manifests for delivery. Media delivery, not a messaging API.
+    - protocol: WebRTC (WHIP/WHEP)
+      scheme: https
+      documented: true
+      note: Live WebRTC beta negotiates SDP over HTTPS for sub-second live. WebRTC media, not a documented client WebSocket messaging API.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in the Cloudflare Stream API or docs as of the review date.
+  endpointsConfirmedRest:
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}
+    - DELETE https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/direct_upload
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/copy
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/clip
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/storage-usage
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/audio
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/audio/copy
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs/{live_input_identifier}
+    - PUT    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs/{live_input_identifier}
+    - DELETE https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs/{live_input_identifier}
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs
+    - PUT    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs/{output_identifier}
+    - DELETE https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs/{output_identifier}
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/captions
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/captions/{language}
+    - PUT    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/captions/{language}
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/captions/{language}/generate
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/captions/{language}/vtt
+    - DELETE https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/captions/{language}
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/keys
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/keys
+    - DELETE https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/keys/{key_id}
+    - POST   https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/{identifier}/token
+    - GET    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/webhook
+    - PUT    https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/webhook
+    - DELETE https://api.cloudflare.com/client/v4/accounts/{account_id}/stream/webhook
+sources:
+  - url: https://developers.cloudflare.com/stream/
+    type: Documentation
+    note: Cloudflare Stream product docs. All programmatic control is REST over HTTPS.
+  - url: https://developers.cloudflare.com/api/resources/stream/
+    type: APIReference
+    note: Core video endpoints under /accounts/{account_id}/stream. Bearer auth, base api.cloudflare.com/client/v4.
+  - url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
+    type: APIReference
+    note: Live inputs and simulcast outputs CRUD. RTMPS/SRT ingest, not WebSocket.
+  - url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
+    type: APIReference
+    note: Captions CRUD plus AI generate and WebVTT retrieval, keyed by BCP 47 language.
+  - url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+    type: Documentation
+    note: Signing keys under /stream/keys and per-video signed tokens via POST /stream/{identifier}/token.
+  - url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+    type: Documentation
+    note: Single per-account webhook (PUT/GET/DELETE /stream/webhook) POSTs a signed notification. Outbound HTTP, not WebSocket.
+  - url: https://developers.cloudflare.com/stream/pricing/
+    type: Pricing
+    note: 5 USD per 1,000 minutes stored, 1 USD per 1,000 minutes delivered.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists on Cloudflare Stream's own API. The
+    control plane is request/response REST, the only push mechanism is an outbound
+    HTTP webhook, and the media transports (RTMPS, SRT, HLS, DASH, WebRTC WHIP/WHEP)
+    are streaming media protocols rather than a client WebSocket messaging API. No
+    AsyncAPI document was created because there is no documented bidirectional
+    WebSocket transport on Stream's own API to model.

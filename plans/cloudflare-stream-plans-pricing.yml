@@ -1,0 +1,101 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Cloudflare Stream
+providerId: cloudflare-stream
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Video
+- Streaming
+- Live Streaming
+- Media
+- Plans
+description: >-
+  Cloudflare Stream uses simple usage-based pricing with two metered dimensions
+  and no per-request API fee. Storage is prepaid at 5 USD per 1,000 minutes of
+  video stored, purchased in increments. Delivery is post-paid at 1 USD per 1,000
+  minutes of video delivered (watched). Live and on-demand video share the same
+  billing model - a live broadcast with no viewers costs nothing to deliver, but
+  any recording counts toward stored minutes, and watched live minutes bill at the
+  standard delivery rate. Encoding, the built-in player, and HLS/DASH delivery are
+  included at no extra charge. Enterprise plans with committed volume and custom
+  terms are available.
+notes: >-
+  Rates confirmed from the Cloudflare Stream pricing page as of the review date
+  (5 USD per 1,000 minutes stored, 1 USD per 1,000 minutes delivered). Media
+  Transformations, a related but separately billed feature, began billing
+  2025-11-01 at 0.50 USD per 1,000 monthly unique transformation operations with a
+  5,000-operation monthly free allocation. Verify current numbers on the pricing
+  page during reconciliation.
+sources:
+- https://developers.cloudflare.com/stream/pricing/
+- https://www.cloudflare.com/products/cloudflare-stream/
+- https://www.cloudflare.com/plans/
+plans:
+- id: cloudflare-stream-storage
+  name: Stream Storage
+  type: usage
+  description: >-
+    Prepaid storage for stored video minutes, purchased in increments. Covers both
+    uploaded on-demand videos and live recordings retained in the library.
+  entries:
+  - label: Minutes Stored
+    name: minutes_stored
+    type: usage
+    metric: minutes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000
+    price: 5.00 USD per 1,000 minutes stored
+    userMultiplied: false
+  elements:
+  - name: On-Demand Video Storage
+  - name: Live Recording Storage
+  - name: Included Encoding
+- id: cloudflare-stream-delivery
+  name: Stream Delivery
+  type: usage
+  description: >-
+    Post-paid delivery billed on minutes of video watched, for both on-demand and
+    live playback. A live broadcast with no viewers incurs no delivery charge.
+  entries:
+  - label: Minutes Delivered
+    name: minutes_delivered
+    type: usage
+    metric: minutes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000
+    price: 1.00 USD per 1,000 minutes delivered
+    userMultiplied: false
+  elements:
+  - name: Adaptive-Bitrate Delivery
+  - name: Built-in Player
+  - name: HLS and DASH Manifests
+- id: cloudflare-stream-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Committed-volume and custom agreements for high-volume video, with negotiated
+    rates, SLAs, and account support. Contact Cloudflare sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Committed Volume Pricing
+  - name: SLAs and Support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

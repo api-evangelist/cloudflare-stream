@@ -1,0 +1,307 @@
+{
+  "info": {
+    "name": "Cloudflare Stream API",
+    "description": "Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare. A single REST API uploads, stores, encodes, and delivers on-demand and live video. Base URL: https://api.cloudflare.com/client/v4. All requests are scoped to an account under /accounts/{{accountId}}/stream and require an Authorization: Bearer token.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiToken}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.cloudflare.com/client/v4", "type": "string" },
+    { "key": "accountId", "value": "", "type": "string" },
+    { "key": "apiToken", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Videos",
+      "item": [
+        {
+          "name": "List videos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream"] },
+            "description": "Lists up to 1,000 videos from a single request."
+          }
+        },
+        {
+          "name": "Retrieve video details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier"], "variable": [{ "key": "identifier", "value": "" }] },
+            "description": "Fetches details for a single video by its uid."
+          }
+        },
+        {
+          "name": "Edit video details",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"meta\": { \"name\": \"my video\" },\n  \"requireSignedURLs\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier"], "variable": [{ "key": "identifier", "value": "" }] },
+            "description": "Edits video metadata such as name, requireSignedURLs, and allowedOrigins."
+          }
+        },
+        {
+          "name": "Delete a video",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier"], "variable": [{ "key": "identifier", "value": "" }] },
+            "description": "Deletes a video and removes it from storage and delivery."
+          }
+        },
+        {
+          "name": "Create a direct creator upload",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"maxDurationSeconds\": 3600\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/direct_upload", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "direct_upload"] },
+            "description": "Creates a one-time upload URL a client can upload to directly."
+          }
+        },
+        {
+          "name": "Upload a video from a URL",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"url\": \"https://example.com/video.mp4\"\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/copy", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "copy"] },
+            "description": "Fetches and ingests a video from a publicly accessible URL."
+          }
+        },
+        {
+          "name": "Clip a video",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"clippedFromVideoUID\": \"\",\n  \"startTimeSeconds\": 0,\n  \"endTimeSeconds\": 30\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/clip", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "clip"] },
+            "description": "Creates a new clipped video from a start and end time of an existing video."
+          }
+        },
+        {
+          "name": "Get account storage usage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/storage-usage", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "storage-usage"] },
+            "description": "Returns the total minutes of video stored and the storage limit."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Live Inputs",
+      "item": [
+        {
+          "name": "List live inputs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs"] },
+            "description": "Lists all live inputs on the account."
+          }
+        },
+        {
+          "name": "Create a live input",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"meta\": { \"name\": \"my live input\" },\n  \"recording\": { \"mode\": \"automatic\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs"] },
+            "description": "Creates a live input that receives a broadcast over RTMPS or SRT."
+          }
+        },
+        {
+          "name": "Retrieve a live input",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs", ":live_input_identifier"], "variable": [{ "key": "live_input_identifier", "value": "" }] },
+            "description": "Fetches details, connection status, and RTMPS/SRT credentials for a live input."
+          }
+        },
+        {
+          "name": "Update a live input",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"recording\": { \"mode\": \"off\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs", ":live_input_identifier"], "variable": [{ "key": "live_input_identifier", "value": "" }] },
+            "description": "Updates the configuration of an existing live input."
+          }
+        },
+        {
+          "name": "Delete a live input",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs", ":live_input_identifier"], "variable": [{ "key": "live_input_identifier", "value": "" }] },
+            "description": "Deletes a live input."
+          }
+        },
+        {
+          "name": "List simulcast outputs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier/outputs", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs", ":live_input_identifier", "outputs"], "variable": [{ "key": "live_input_identifier", "value": "" }] },
+            "description": "Lists the simulcast (restreaming) outputs configured on a live input."
+          }
+        },
+        {
+          "name": "Create a simulcast output",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"url\": \"rtmps://live.example.com/live\",\n  \"streamKey\": \"\"\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier/outputs", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs", ":live_input_identifier", "outputs"], "variable": [{ "key": "live_input_identifier", "value": "" }] },
+            "description": "Creates a simulcast output that restreams to another RTMP or SRT destination."
+          }
+        },
+        {
+          "name": "Delete a simulcast output",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier/outputs/:output_identifier", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "live_inputs", ":live_input_identifier", "outputs", ":output_identifier"], "variable": [{ "key": "live_input_identifier", "value": "" }, { "key": "output_identifier", "value": "" }] },
+            "description": "Deletes a simulcast output from a live input."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Captions",
+      "item": [
+        {
+          "name": "List captions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier/captions", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier", "captions"], "variable": [{ "key": "identifier", "value": "" }] },
+            "description": "Lists the available caption and subtitle languages for a video."
+          }
+        },
+        {
+          "name": "Upload captions for a language",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": [] }] },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier/captions/:language", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier", "captions", ":language"], "variable": [{ "key": "identifier", "value": "" }, { "key": "language", "value": "en" }] },
+            "description": "Uploads a caption or subtitle file for a BCP 47 language via multipart/form-data."
+          }
+        },
+        {
+          "name": "Generate captions with AI",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier/captions/:language/generate", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier", "captions", ":language", "generate"], "variable": [{ "key": "identifier", "value": "" }, { "key": "language", "value": "en" }] },
+            "description": "Automatically generates captions for a language using AI transcription."
+          }
+        },
+        {
+          "name": "Get captions as WebVTT",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier/captions/:language/vtt", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier", "captions", ":language", "vtt"], "variable": [{ "key": "identifier", "value": "" }, { "key": "language", "value": "en" }] },
+            "description": "Returns the captions for a language in WebVTT format."
+          }
+        },
+        {
+          "name": "Delete captions for a language",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier/captions/:language", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier", "captions", ":language"], "variable": [{ "key": "identifier", "value": "" }, { "key": "language", "value": "en" }] },
+            "description": "Deletes the captions for a language from a video."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Signed URLs",
+      "item": [
+        {
+          "name": "Create a signing key",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/keys", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "keys"] },
+            "description": "Creates an RSA signing key, returning base64-encoded pem and jwk values."
+          }
+        },
+        {
+          "name": "List signing keys",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/keys", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "keys"] },
+            "description": "Lists the signing key IDs available on the account."
+          }
+        },
+        {
+          "name": "Delete a signing key",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/keys/:key_id", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "keys", ":key_id"], "variable": [{ "key": "key_id", "value": "" }] },
+            "description": "Revokes a signing key, invalidating all tokens created with it."
+          }
+        },
+        {
+          "name": "Create a signed URL token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"exp\": 1735689600,\n  \"downloadable\": false\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/:identifier/token", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", ":identifier", "token"], "variable": [{ "key": "identifier", "value": "" }] },
+            "description": "Mints a signed URL token for a video, expiring in one hour by default."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "View webhook",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/webhook", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "webhook"] },
+            "description": "Retrieves the current per-account webhook subscription."
+          }
+        },
+        {
+          "name": "Create or update the webhook",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"notificationUrl\": \"https://example.com/webhook\"\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/webhook", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "webhook"] },
+            "description": "Subscribes the single per-account webhook for video ready/error notifications."
+          }
+        },
+        {
+          "name": "Delete the webhook",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/{{accountId}}/stream/webhook", "host": ["{{baseUrl}}"], "path": ["accounts", "{{accountId}}", "stream", "webhook"] },
+            "description": "Deletes the per-account webhook subscription."
+          }
+        }
+      ]
+    }
+  ]
+}

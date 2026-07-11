@@ -1,0 +1,293 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cloudflare Stream API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{apiToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Videos", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List videos.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream" },
+          "docs": "Lists up to 1,000 videos from a single request."
+        },
+        {
+          "info": { "name": "Retrieve video details.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." }
+            ]
+          },
+          "docs": "Fetches details for a single video by its uid."
+        },
+        {
+          "info": { "name": "Edit video details.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." }
+            ],
+            "body": { "type": "json", "data": "{\"meta\":{\"name\":\"my video\"},\"requireSignedURLs\":true}" }
+          },
+          "docs": "Edits video metadata such as name, requireSignedURLs, and allowedOrigins."
+        },
+        {
+          "info": { "name": "Delete a video.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." }
+            ]
+          },
+          "docs": "Deletes a video and removes it from storage and delivery."
+        },
+        {
+          "info": { "name": "Create a direct creator upload.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/direct_upload",
+            "body": { "type": "json", "data": "{\"maxDurationSeconds\":3600}" }
+          },
+          "docs": "Creates a one-time upload URL a client can upload to directly."
+        },
+        {
+          "info": { "name": "Upload a video from a URL.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/copy",
+            "body": { "type": "json", "data": "{\"url\":\"https://example.com/video.mp4\"}" }
+          },
+          "docs": "Fetches and ingests a video from a publicly accessible URL."
+        },
+        {
+          "info": { "name": "Clip a video.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/clip",
+            "body": { "type": "json", "data": "{\"clippedFromVideoUID\":\"\",\"startTimeSeconds\":0,\"endTimeSeconds\":30}" }
+          },
+          "docs": "Creates a new clipped video from a start and end time of an existing video."
+        },
+        {
+          "info": { "name": "Get account storage usage.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/storage-usage" },
+          "docs": "Returns the total minutes of video stored and the storage limit."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Live Inputs", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List live inputs.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs" },
+          "docs": "Lists all live inputs on the account."
+        },
+        {
+          "info": { "name": "Create a live input.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs",
+            "body": { "type": "json", "data": "{\"meta\":{\"name\":\"my live input\"},\"recording\":{\"mode\":\"automatic\"}}" }
+          },
+          "docs": "Creates a live input that receives a broadcast over RTMPS or SRT."
+        },
+        {
+          "info": { "name": "Retrieve a live input.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier",
+            "params": [
+              { "name": "live_input_identifier", "value": "", "type": "path", "description": "The live input identifier." }
+            ]
+          },
+          "docs": "Fetches details, connection status, and RTMPS/SRT credentials for a live input."
+        },
+        {
+          "info": { "name": "Update a live input.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier",
+            "params": [
+              { "name": "live_input_identifier", "value": "", "type": "path", "description": "The live input identifier." }
+            ],
+            "body": { "type": "json", "data": "{\"recording\":{\"mode\":\"off\"}}" }
+          },
+          "docs": "Updates the configuration of an existing live input."
+        },
+        {
+          "info": { "name": "Delete a live input.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier",
+            "params": [
+              { "name": "live_input_identifier", "value": "", "type": "path", "description": "The live input identifier." }
+            ]
+          },
+          "docs": "Deletes a live input."
+        },
+        {
+          "info": { "name": "List simulcast outputs.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier/outputs",
+            "params": [
+              { "name": "live_input_identifier", "value": "", "type": "path", "description": "The live input identifier." }
+            ]
+          },
+          "docs": "Lists the simulcast (restreaming) outputs configured on a live input."
+        },
+        {
+          "info": { "name": "Create a simulcast output.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier/outputs",
+            "params": [
+              { "name": "live_input_identifier", "value": "", "type": "path", "description": "The live input identifier." }
+            ],
+            "body": { "type": "json", "data": "{\"url\":\"rtmps://live.example.com/live\",\"streamKey\":\"\"}" }
+          },
+          "docs": "Creates a simulcast output that restreams to another RTMP or SRT destination."
+        },
+        {
+          "info": { "name": "Delete a simulcast output.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/live_inputs/:live_input_identifier/outputs/:output_identifier",
+            "params": [
+              { "name": "live_input_identifier", "value": "", "type": "path", "description": "The live input identifier." },
+              { "name": "output_identifier", "value": "", "type": "path", "description": "The simulcast output identifier." }
+            ]
+          },
+          "docs": "Deletes a simulcast output from a live input."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Captions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List captions.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier/captions",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." }
+            ]
+          },
+          "docs": "Lists the available caption and subtitle languages for a video."
+        },
+        {
+          "info": { "name": "Generate captions with AI.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier/captions/:language/generate",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." },
+              { "name": "language", "value": "en", "type": "path", "description": "The BCP 47 language tag." }
+            ]
+          },
+          "docs": "Automatically generates captions for a language using AI transcription."
+        },
+        {
+          "info": { "name": "Get captions as WebVTT.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier/captions/:language/vtt",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." },
+              { "name": "language", "value": "en", "type": "path", "description": "The BCP 47 language tag." }
+            ]
+          },
+          "docs": "Returns the captions for a language in WebVTT format."
+        },
+        {
+          "info": { "name": "Delete captions for a language.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier/captions/:language",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." },
+              { "name": "language", "value": "en", "type": "path", "description": "The BCP 47 language tag." }
+            ]
+          },
+          "docs": "Deletes the captions for a language from a video."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Signed URLs", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a signing key.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/keys" },
+          "docs": "Creates an RSA signing key, returning base64-encoded pem and jwk values."
+        },
+        {
+          "info": { "name": "List signing keys.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/keys" },
+          "docs": "Lists the signing key IDs available on the account."
+        },
+        {
+          "info": { "name": "Delete a signing key.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/keys/:key_id",
+            "params": [
+              { "name": "key_id", "value": "", "type": "path", "description": "The signing key ID." }
+            ]
+          },
+          "docs": "Revokes a signing key, invalidating all tokens created with it."
+        },
+        {
+          "info": { "name": "Create a signed URL token.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/:identifier/token",
+            "params": [
+              { "name": "identifier", "value": "", "type": "path", "description": "The video uid." }
+            ],
+            "body": { "type": "json", "data": "{\"exp\":1735689600,\"downloadable\":false}" }
+          },
+          "docs": "Mints a signed URL token for a video, expiring in one hour by default."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Webhooks", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "View webhook.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/webhook" },
+          "docs": "Retrieves the current per-account webhook subscription."
+        },
+        {
+          "info": { "name": "Create or update the webhook.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/webhook",
+            "body": { "type": "json", "data": "{\"notificationUrl\":\"https://example.com/webhook\"}" }
+          },
+          "docs": "Subscribes the single per-account webhook for video ready/error notifications."
+        },
+        {
+          "info": { "name": "Delete the webhook.", "type": "http" },
+          "http": { "method": "DELETE", "url": "https://api.cloudflare.com/client/v4/accounts/{{accountId}}/stream/webhook" },
+          "docs": "Deletes the per-account webhook subscription."
+        }
+      ]
+    }
+  ]
+}

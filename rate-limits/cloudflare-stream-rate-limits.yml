@@ -1,0 +1,68 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Cloudflare Stream
+providerId: cloudflare-stream
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Video
+- Streaming
+- Media
+- Rate Limiting
+- Quotas
+description: >-
+  Cloudflare Stream is served through the shared Cloudflare API at
+  api.cloudflare.com/client/v4, which enforces a global limit of 1,200 requests
+  per five minutes per user across all Cloudflare API endpoints. Stream itself
+  adds product-level constraints rather than a separate per-endpoint request cap:
+  list operations return up to 1,000 videos per request, an account may hold up to
+  1,000 signing keys, and only one webhook subscription is allowed per account.
+  Throughput is otherwise governed by usage-based storage and delivery billing, not
+  by a per-minute quota. Media ingest (RTMPS/SRT) and delivery (HLS/DASH) run on
+  the media plane and are not counted against the control-plane API request limit.
+notes: >-
+  The 1,200-requests-per-5-minutes figure is the account-wide Cloudflare API limit
+  documented for api.cloudflare.com and applies to Stream control-plane calls.
+  Stream does not publish a separate numeric request-rate limit as of the review
+  date. Verify current limits on the Cloudflare API reference during
+  reconciliation.
+sources:
+- https://developers.cloudflare.com/fundamentals/api/reference/limits/
+- https://developers.cloudflare.com/api/resources/stream/
+- https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+- https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+responseCodes:
+  throttled: 429
+limits:
+- name: Cloudflare API Requests
+  scope: account
+  metric: requests
+  limit: 1200 per 5 minutes
+  notes: Global Cloudflare API limit that applies to all Stream control-plane calls.
+- name: List Videos Page Size
+  scope: request
+  metric: videos
+  limit: 1000 per request
+  notes: A single list request returns up to 1,000 videos; paginate for more.
+- name: Signing Keys
+  scope: account
+  metric: keys
+  limit: 1000 per account
+  notes: Up to 1,000 signed-URL signing keys can exist per account.
+- name: Webhook Subscriptions
+  scope: account
+  metric: subscriptions
+  limit: 1 per account
+  notes: Only one Stream webhook subscription is allowed per account.
+policies:
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses from the Cloudflare API.
+- name: Usage-Based Throughput
+  description: Sustained video volume is governed by usage-based storage and delivery billing rather than a fixed per-minute quota.
+- name: Signed Token Expiry
+  description: Signed URL tokens expire in one hour by default; mint fresh tokens rather than reusing expired ones.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
