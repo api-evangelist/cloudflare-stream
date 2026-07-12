@@ -171,6 +171,12 @@ apis:
     analytics (minutes viewed, by video, country, and time) through the Cloudflare
     GraphQL Analytics API stream datasets.
 common:
+- type: VulnerabilityDisclosure
+  url: security/cloudflare-stream-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/cloudflare-stream-domain-security.yml
+- type: Authentication
+  url: authentication/cloudflare-stream-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/cloudflare
 - type: Website
