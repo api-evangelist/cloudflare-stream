@@ -171,6 +171,8 @@ apis:
     analytics (minutes viewed, by video, country, and time) through the Cloudflare
     GraphQL Analytics API stream datasets.
 common:
+- type: AgenticAccess
+  url: agentic-access/cloudflare-stream-agentic-access.yml
 - type: VulnerabilityDisclosure
   url: security/cloudflare-stream-vulnerability-disclosure.yml
 - type: DomainSecurity
