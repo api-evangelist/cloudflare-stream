@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: Cloudflare Stream Analytics API
+  description: Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare. A single REST API uploads, stores, encodes, and delivers on-demand and live video across Cloudflare's global network, with a built-in adaptive-bitrate player, HLS/DASH manifests, live inputs over RTMPS and SRT, AI-generated and uploaded captions, signed-URL access control, per-account webhooks, and viewing analytics. All requests are scoped to an account under /accounts/{account_id}/stream and authenticate with a Bearer API token. This document grounds the core Stream endpoints; it is not exhaustive of every Cloudflare Stream operation.
+  version: '1.0'
+  contact:
+    name: Cloudflare Stream
+    url: https://developers.cloudflare.com/stream/
+  license:
+    name: Cloudflare Website and Online Services Terms of Use
+    url: https://www.cloudflare.com/terms/
+servers:
+- url: https://api.cloudflare.com/client/v4
+  description: Cloudflare API v4
+security:
+- bearerAuth: []
+tags:
+- name: Analytics
+  description: Account storage usage and viewing analytics.
+paths:
+  /accounts/{account_id}/stream/storage-usage:
+    get:
+      operationId: getStorageUsage
+      tags:
+      - Analytics
+      summary: Get account storage usage
+      description: Returns the total minutes of video stored and the storage limit for the account.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Storage usage totals.
+components:
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Cloudflare API token passed in an Authorization Bearer header.

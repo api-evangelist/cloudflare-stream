@@ -1,0 +1,143 @@
+openapi: 3.0.3
+info:
+  title: Cloudflare Stream Analytics Captions API
+  description: Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare. A single REST API uploads, stores, encodes, and delivers on-demand and live video across Cloudflare's global network, with a built-in adaptive-bitrate player, HLS/DASH manifests, live inputs over RTMPS and SRT, AI-generated and uploaded captions, signed-URL access control, per-account webhooks, and viewing analytics. All requests are scoped to an account under /accounts/{account_id}/stream and authenticate with a Bearer API token. This document grounds the core Stream endpoints; it is not exhaustive of every Cloudflare Stream operation.
+  version: '1.0'
+  contact:
+    name: Cloudflare Stream
+    url: https://developers.cloudflare.com/stream/
+  license:
+    name: Cloudflare Website and Online Services Terms of Use
+    url: https://www.cloudflare.com/terms/
+servers:
+- url: https://api.cloudflare.com/client/v4
+  description: Cloudflare API v4
+security:
+- bearerAuth: []
+tags:
+- name: Captions
+  description: Per-language captions and subtitles for a video.
+paths:
+  /accounts/{account_id}/stream/{identifier}/captions:
+    get:
+      operationId: listCaptions
+      tags:
+      - Captions
+      summary: List captions
+      description: Lists the available caption and subtitle languages for a video.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: A list of captions.
+  /accounts/{account_id}/stream/{identifier}/captions/{language}:
+    get:
+      operationId: getCaption
+      tags:
+      - Captions
+      summary: Get caption details for a language
+      description: Fetches the caption entry for a specific BCP 47 language tag.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The caption details.
+    put:
+      operationId: uploadCaption
+      tags:
+      - Captions
+      summary: Upload captions for a language
+      description: Uploads a caption or subtitle file for a language via multipart/form-data.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      - $ref: '#/components/parameters/Language'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: The uploaded caption.
+    delete:
+      operationId: deleteCaption
+      tags:
+      - Captions
+      summary: Delete captions for a language
+      description: Deletes the captions for a language from a video.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The captions were deleted.
+  /accounts/{account_id}/stream/{identifier}/captions/{language}/generate:
+    post:
+      operationId: generateCaption
+      tags:
+      - Captions
+      summary: Generate captions with AI
+      description: Automatically generates captions for a language using AI transcription.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The generation job was accepted.
+  /accounts/{account_id}/stream/{identifier}/captions/{language}/vtt:
+    get:
+      operationId: getCaptionVtt
+      tags:
+      - Captions
+      summary: Get captions as WebVTT
+      description: Returns the captions for a language in WebVTT format.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The WebVTT caption file.
+          content:
+            text/vtt:
+              schema:
+                type: string
+components:
+  parameters:
+    Language:
+      name: language
+      in: path
+      required: true
+      description: The BCP 47 language tag (for example, en or tr).
+      schema:
+        type: string
+    Identifier:
+      name: identifier
+      in: path
+      required: true
+      description: The video identifier (uid).
+      schema:
+        type: string
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Cloudflare API token passed in an Authorization Bearer header.

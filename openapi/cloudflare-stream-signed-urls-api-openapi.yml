@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: Cloudflare Stream Analytics Signed URLs API
+  description: Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare. A single REST API uploads, stores, encodes, and delivers on-demand and live video across Cloudflare's global network, with a built-in adaptive-bitrate player, HLS/DASH manifests, live inputs over RTMPS and SRT, AI-generated and uploaded captions, signed-URL access control, per-account webhooks, and viewing analytics. All requests are scoped to an account under /accounts/{account_id}/stream and authenticate with a Bearer API token. This document grounds the core Stream endpoints; it is not exhaustive of every Cloudflare Stream operation.
+  version: '1.0'
+  contact:
+    name: Cloudflare Stream
+    url: https://developers.cloudflare.com/stream/
+  license:
+    name: Cloudflare Website and Online Services Terms of Use
+    url: https://www.cloudflare.com/terms/
+servers:
+- url: https://api.cloudflare.com/client/v4
+  description: Cloudflare API v4
+security:
+- bearerAuth: []
+tags:
+- name: Signed URLs
+  description: Signing keys and per-video signed playback tokens.
+paths:
+  /accounts/{account_id}/stream/keys:
+    get:
+      operationId: listSigningKeys
+      tags:
+      - Signed URLs
+      summary: List signing keys
+      description: Lists the signing key IDs available on the account.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: A list of signing keys.
+    post:
+      operationId: createSigningKey
+      tags:
+      - Signed URLs
+      summary: Create a signing key
+      description: Creates an RSA signing key used to generate signed URL tokens, returning base64-encoded pem and jwk values. Up to 1,000 keys per account.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: The created signing key.
+  /accounts/{account_id}/stream/keys/{key_id}:
+    delete:
+      operationId: deleteSigningKey
+      tags:
+      - Signed URLs
+      summary: Delete a signing key
+      description: Revokes a signing key, invalidating all tokens created with it.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - name: key_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The signing key was deleted.
+  /accounts/{account_id}/stream/{identifier}/token:
+    post:
+      operationId: createSignedToken
+      tags:
+      - Signed URLs
+      summary: Create a signed URL token
+      description: Mints a signed URL token for a video, expiring in one hour by default, with optional access rules such as expiry, allowed origins, and IP restrictions. Does not support Live WebRTC playback.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                exp:
+                  type: integer
+                nbf:
+                  type: integer
+                downloadable:
+                  type: boolean
+      responses:
+        '200':
+          description: The signed token.
+components:
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+    Identifier:
+      name: identifier
+      in: path
+      required: true
+      description: The video identifier (uid).
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Cloudflare API token passed in an Authorization Bearer header.

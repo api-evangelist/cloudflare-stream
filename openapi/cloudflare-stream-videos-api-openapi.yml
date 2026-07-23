@@ -1,0 +1,284 @@
+openapi: 3.0.3
+info:
+  title: Cloudflare Stream Analytics Videos API
+  description: Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare. A single REST API uploads, stores, encodes, and delivers on-demand and live video across Cloudflare's global network, with a built-in adaptive-bitrate player, HLS/DASH manifests, live inputs over RTMPS and SRT, AI-generated and uploaded captions, signed-URL access control, per-account webhooks, and viewing analytics. All requests are scoped to an account under /accounts/{account_id}/stream and authenticate with a Bearer API token. This document grounds the core Stream endpoints; it is not exhaustive of every Cloudflare Stream operation.
+  version: '1.0'
+  contact:
+    name: Cloudflare Stream
+    url: https://developers.cloudflare.com/stream/
+  license:
+    name: Cloudflare Website and Online Services Terms of Use
+    url: https://www.cloudflare.com/terms/
+servers:
+- url: https://api.cloudflare.com/client/v4
+  description: Cloudflare API v4
+security:
+- bearerAuth: []
+tags:
+- name: Videos
+  description: On-demand video upload, storage, encoding, and management.
+paths:
+  /accounts/{account_id}/stream:
+    get:
+      operationId: listVideos
+      tags:
+      - Videos
+      summary: List videos
+      description: Lists up to 1,000 videos from a single request, with optional filtering.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: A list of videos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: uploadVideoTus
+      tags:
+      - Videos
+      summary: Initiate a TUS resumable upload
+      description: Initiates a TUS resumable video upload. The Tus-Resumable, Upload-Length, and Upload-Metadata headers are used to negotiate the upload; the response returns a stream-media-id and a location to PATCH chunks to.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      responses:
+        '201':
+          description: The upload session was created.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /accounts/{account_id}/stream/{identifier}:
+    get:
+      operationId: getVideoDetails
+      tags:
+      - Videos
+      summary: Retrieve video details
+      description: Fetches details for a single video by its identifier (uid).
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: The video details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: editVideo
+      tags:
+      - Videos
+      summary: Edit video details
+      description: Edits video metadata such as name, requireSignedURLs, and allowedOrigins.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: The updated video details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoResponse'
+    delete:
+      operationId: deleteVideo
+      tags:
+      - Videos
+      summary: Delete a video
+      description: Deletes a video and removes it from storage and delivery.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: The video was deleted.
+  /accounts/{account_id}/stream/direct_upload:
+    post:
+      operationId: createDirectUpload
+      tags:
+      - Videos
+      summary: Create a direct creator upload
+      description: Creates a one-time upload URL that a client or end user can upload a video to directly, without exposing your API token.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maxDurationSeconds:
+                  type: integer
+      responses:
+        '200':
+          description: A one-time upload URL and video uid.
+  /accounts/{account_id}/stream/copy:
+    post:
+      operationId: copyVideoFromUrl
+      tags:
+      - Videos
+      summary: Upload a video from a URL
+      description: Fetches and ingests a video from a publicly accessible URL.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+      responses:
+        '200':
+          description: The created video.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoResponse'
+  /accounts/{account_id}/stream/clip:
+    post:
+      operationId: clipVideo
+      tags:
+      - Videos
+      summary: Clip a video
+      description: Creates a new clipped video from a start and end time of an existing video.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clippedFromVideoUID:
+                  type: string
+                startTimeSeconds:
+                  type: integer
+                endTimeSeconds:
+                  type: integer
+      responses:
+        '200':
+          description: The created clip.
+  /accounts/{account_id}/stream/{identifier}/audio:
+    get:
+      operationId: listAudioTracks
+      tags:
+      - Videos
+      summary: List additional audio tracks
+      description: Lists the additional audio tracks attached to a video.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: A list of audio tracks.
+  /accounts/{account_id}/stream/{identifier}/audio/copy:
+    post:
+      operationId: addAudioTrack
+      tags:
+      - Videos
+      summary: Add an audio track from a URL
+      description: Adds an additional audio track to a video by copying it from a URL.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Identifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                label:
+                  type: string
+      responses:
+        '200':
+          description: The added audio track.
+components:
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+    Identifier:
+      name: identifier
+      in: path
+      required: true
+      description: The video identifier (uid).
+      schema:
+        type: string
+  schemas:
+    VideoResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Video'
+        success:
+          type: boolean
+    VideoListResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+        success:
+          type: boolean
+    Video:
+      type: object
+      properties:
+        uid:
+          type: string
+        readyToStream:
+          type: boolean
+        status:
+          type: object
+          properties:
+            state:
+              type: string
+            pctComplete:
+              type: string
+        duration:
+          type: number
+        playback:
+          type: object
+          properties:
+            hls:
+              type: string
+            dash:
+              type: string
+        requireSignedURLs:
+          type: boolean
+        preview:
+          type: string
+        thumbnail:
+          type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API token is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Cloudflare API token passed in an Authorization Bearer header.
