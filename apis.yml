@@ -13,7 +13,20 @@ description: Cloudflare Stream is the video streaming, hosting, and live-video p
   API is served under https://api.cloudflare.com/client/v4/accounts/{account_id}/stream
   and authenticates with a Bearer API token. Billed at $5 per 1,000 minutes of video
   stored and $1 per 1,000 minutes delivered.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cloudflare-stream.png
 tags:
 - Video
 - Streaming
@@ -25,151 +38,246 @@ created: '2026-07-11'
 modified: '2026-07-11'
 specificationVersion: '0.19'
 apis:
-- aid: cloudflare-stream:cloudflare-stream-videos-api
-  name: Cloudflare Stream Videos API
-  tags:
-  - Video
-  - Uploads
-  - On-Demand
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.cloudflare.com/api/resources/stream/
-  baseURL: https://api.cloudflare.com/client/v4
-  properties:
-  - url: https://developers.cloudflare.com/stream/
-    type: Documentation
-  - url: https://developers.cloudflare.com/api/resources/stream/
-    type: APIReference
-  - url: https://developers.cloudflare.com/stream/get-started/
-    type: GettingStarted
-  - url: openapi/cloudflare-stream-openapi.yml
-    type: OpenAPI
-  - url: collections/cloudflare-stream.postman_collection.json
-    type: PostmanCollection
-  - url: collections/cloudflare-stream.opencollection.json
-    type: OpenCollection
-  description: Upload, store, encode, list, edit, and delete on-demand video. Supports
-    direct uploads, TUS resumable uploads, copy-from-URL ingest, one-time direct
-    creator uploads, video clipping, per-video audio tracks, and account storage
-    usage - all under /accounts/{account_id}/stream.
-- aid: cloudflare-stream:cloudflare-stream-live-inputs-api
-  name: Cloudflare Stream Live Inputs API
-  tags:
-  - Live Streaming
-  - RTMPS
-  - SRT
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
-  baseURL: https://api.cloudflare.com/client/v4
-  properties:
-  - url: https://developers.cloudflare.com/stream/stream-live/
-    type: Documentation
-  - url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
-    type: APIReference
-  - url: openapi/cloudflare-stream-openapi.yml
-    type: OpenAPI
-  - url: collections/cloudflare-stream.postman_collection.json
-    type: PostmanCollection
-  - url: collections/cloudflare-stream.opencollection.json
-    type: OpenCollection
-  description: Create and manage live inputs that receive broadcasts over RTMPS or
-    SRT and deliver them live and as recordings. Manage simulcast outputs that
-    restream one input to other RTMP or SRT destinations, under
-    /accounts/{account_id}/stream/live_inputs.
-- aid: cloudflare-stream:cloudflare-stream-captions-api
-  name: Cloudflare Stream Captions API
-  tags:
-  - Captions
-  - Subtitles
-  - Accessibility
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
-  baseURL: https://api.cloudflare.com/client/v4
-  properties:
-  - url: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
-    type: Documentation
-  - url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
-    type: APIReference
-  - url: openapi/cloudflare-stream-openapi.yml
-    type: OpenAPI
-  - url: collections/cloudflare-stream.postman_collection.json
-    type: PostmanCollection
-  - url: collections/cloudflare-stream.opencollection.json
-    type: OpenCollection
-  description: List, upload, AI-generate, retrieve (including WebVTT), and delete
-    per-language captions and subtitles for a video, keyed by BCP 47 language tag,
-    under /accounts/{account_id}/stream/{identifier}/captions.
-- aid: cloudflare-stream:cloudflare-stream-signed-urls-api
-  name: Cloudflare Stream Signed URLs API
-  tags:
-  - Signed URLs
-  - Access Control
-  - Security
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
-  baseURL: https://api.cloudflare.com/client/v4
-  properties:
-  - url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
-    type: Documentation
-  - url: https://developers.cloudflare.com/api/resources/stream/subresources/keys/
-    type: APIReference
-  - url: openapi/cloudflare-stream-openapi.yml
-    type: OpenAPI
-  - url: collections/cloudflare-stream.postman_collection.json
-    type: PostmanCollection
-  - url: collections/cloudflare-stream.opencollection.json
-    type: OpenCollection
-  description: Restrict playback with signed URLs. Create and revoke RSA signing keys
-    (up to 1,000 per account) under /accounts/{account_id}/stream/keys, and mint
-    per-video signed tokens via POST /accounts/{account_id}/stream/{identifier}/token
-    with configurable expiry and access rules.
-- aid: cloudflare-stream:cloudflare-stream-webhooks-api
-  name: Cloudflare Stream Webhooks API
-  tags:
-  - Webhooks
-  - Events
-  - Notifications
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
-  baseURL: https://api.cloudflare.com/client/v4
-  properties:
-  - url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
-    type: Documentation
-  - url: https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/
-    type: APIReference
-  - url: openapi/cloudflare-stream-openapi.yml
-    type: OpenAPI
-  - url: collections/cloudflare-stream.postman_collection.json
-    type: PostmanCollection
-  - url: collections/cloudflare-stream.opencollection.json
-    type: OpenCollection
-  description: Subscribe, view, and delete the single per-account webhook that Stream
-    calls when a video finishes processing or enters an error state. Notifications
-    are signed with a secret and carry uid, readyToStream, and status fields, under
-    /accounts/{account_id}/stream/webhook.
 - aid: cloudflare-stream:cloudflare-stream-analytics-api
   name: Cloudflare Stream Analytics API
+  description: Account storage usage and viewing analytics.
+  humanURL: https://developers.cloudflare.com/api/resources/stream/
+  baseURL: https://api.cloudflare.com/client/v4
   tags:
   - Analytics
-  - Reporting
-  - Usage
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developers.cloudflare.com/stream/getting-analytics/
-  baseURL: https://api.cloudflare.com/client/v4
   properties:
-  - url: https://developers.cloudflare.com/stream/getting-analytics/
-    type: Documentation
-  - url: https://developers.cloudflare.com/analytics/graphql-api/
-    type: APIReference
-  - url: openapi/cloudflare-stream-openapi.yml
-    type: OpenAPI
-  - url: collections/cloudflare-stream.postman_collection.json
-    type: PostmanCollection
-  - url: collections/cloudflare-stream.opencollection.json
-    type: OpenCollection
-  description: Measure minutes viewed and stored. Read account video storage usage
-    via GET /accounts/{account_id}/stream/storage-usage, and query rich viewing
-    analytics (minutes viewed, by video, country, and time) through the Cloudflare
-    GraphQL Analytics API stream datasets.
+  - type: OpenAPI
+    url: openapi/cloudflare-stream-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/
+  - type: GettingStarted
+    url: https://developers.cloudflare.com/stream/get-started/
+  - type: PostmanCollection
+    url: collections/cloudflare-stream.postman_collection.json
+  - type: OpenCollection
+    url: collections/cloudflare-stream.opencollection.json
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/stream-live/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/keys/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/getting-analytics/
+  - type: APIReference
+    url: https://developers.cloudflare.com/analytics/graphql-api/
+- aid: cloudflare-stream:cloudflare-stream-captions-api
+  name: Cloudflare Stream Captions API
+  description: Per-language captions and subtitles for a video.
+  humanURL: https://developers.cloudflare.com/api/resources/stream/
+  baseURL: https://api.cloudflare.com/client/v4
+  tags:
+  - Captions
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudflare-stream-captions-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/
+  - type: GettingStarted
+    url: https://developers.cloudflare.com/stream/get-started/
+  - type: PostmanCollection
+    url: collections/cloudflare-stream.postman_collection.json
+  - type: OpenCollection
+    url: collections/cloudflare-stream.opencollection.json
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/stream-live/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/keys/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/getting-analytics/
+  - type: APIReference
+    url: https://developers.cloudflare.com/analytics/graphql-api/
+- aid: cloudflare-stream:cloudflare-stream-live-inputs-api
+  name: Cloudflare Stream Live Inputs API
+  description: Live inputs receiving RTMPS or SRT broadcasts, plus simulcast outputs.
+  humanURL: https://developers.cloudflare.com/api/resources/stream/
+  baseURL: https://api.cloudflare.com/client/v4
+  tags:
+  - Live Inputs
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudflare-stream-live-inputs-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/
+  - type: GettingStarted
+    url: https://developers.cloudflare.com/stream/get-started/
+  - type: PostmanCollection
+    url: collections/cloudflare-stream.postman_collection.json
+  - type: OpenCollection
+    url: collections/cloudflare-stream.opencollection.json
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/stream-live/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/keys/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/getting-analytics/
+  - type: APIReference
+    url: https://developers.cloudflare.com/analytics/graphql-api/
+- aid: cloudflare-stream:cloudflare-stream-signed-urls-api
+  name: Cloudflare Stream Signed URLs API
+  description: Signing keys and per-video signed playback tokens.
+  humanURL: https://developers.cloudflare.com/api/resources/stream/
+  baseURL: https://api.cloudflare.com/client/v4
+  tags:
+  - Signed URLs
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudflare-stream-signed-urls-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/
+  - type: GettingStarted
+    url: https://developers.cloudflare.com/stream/get-started/
+  - type: PostmanCollection
+    url: collections/cloudflare-stream.postman_collection.json
+  - type: OpenCollection
+    url: collections/cloudflare-stream.opencollection.json
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/stream-live/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/keys/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/getting-analytics/
+  - type: APIReference
+    url: https://developers.cloudflare.com/analytics/graphql-api/
+- aid: cloudflare-stream:cloudflare-stream-videos-api
+  name: Cloudflare Stream Videos API
+  description: On-demand video upload, storage, encoding, and management.
+  humanURL: https://developers.cloudflare.com/api/resources/stream/
+  baseURL: https://api.cloudflare.com/client/v4
+  tags:
+  - Videos
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudflare-stream-videos-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/
+  - type: GettingStarted
+    url: https://developers.cloudflare.com/stream/get-started/
+  - type: PostmanCollection
+    url: collections/cloudflare-stream.postman_collection.json
+  - type: OpenCollection
+    url: collections/cloudflare-stream.opencollection.json
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/stream-live/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/keys/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/getting-analytics/
+  - type: APIReference
+    url: https://developers.cloudflare.com/analytics/graphql-api/
+- aid: cloudflare-stream:cloudflare-stream-webhooks-api
+  name: Cloudflare Stream Webhooks API
+  description: The single per-account webhook for video processing notifications.
+  humanURL: https://developers.cloudflare.com/api/resources/stream/
+  baseURL: https://api.cloudflare.com/client/v4
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cloudflare-stream-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/
+  - type: GettingStarted
+    url: https://developers.cloudflare.com/stream/get-started/
+  - type: PostmanCollection
+    url: collections/cloudflare-stream.postman_collection.json
+  - type: OpenCollection
+    url: collections/cloudflare-stream.opencollection.json
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/stream-live/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/edit-videos/adding-captions/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/captions/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/keys/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/
+  - type: APIReference
+    url: https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/
+  - type: Documentation
+    url: https://developers.cloudflare.com/stream/getting-analytics/
+  - type: APIReference
+    url: https://developers.cloudflare.com/analytics/graphql-api/
 common:
 - type: AgenticAccess
   url: agentic-access/cloudflare-stream-agentic-access.yml
