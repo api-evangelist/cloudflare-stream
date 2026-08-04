@@ -1,0 +1,24 @@
+{
+  "provider": "cloudflare-stream",
+  "sources": [
+    "cloudflare-stream-analytics-api-openapi.yml",
+    "cloudflare-stream-captions-api-openapi.yml",
+    "cloudflare-stream-live-inputs-api-openapi.yml",
+    "cloudflare-stream-signed-urls-api-openapi.yml",
+    "cloudflare-stream-videos-api-openapi.yml",
+    "cloudflare-stream-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "cloudflare-stream-analytics-api-openapi.yml",
+    "cloudflare-stream-captions-api-openapi.yml",
+    "cloudflare-stream-live-inputs-api-openapi.yml",
+    "cloudflare-stream-signed-urls-api-openapi.yml",
+    "cloudflare-stream-videos-api-openapi.yml",
+    "cloudflare-stream-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

@@ -1,0 +1,749 @@
+openapi: 3.0.3
+info:
+  title: Cloudflare Stream API
+  description: >-
+    Cloudflare Stream is the video streaming, hosting, and live-video product from
+    Cloudflare. A single REST API uploads, stores, encodes, and delivers on-demand
+    and live video across Cloudflare's global network, with a built-in
+    adaptive-bitrate player, HLS/DASH manifests, live inputs over RTMPS and SRT,
+    AI-generated and uploaded captions, signed-URL access control, per-account
+    webhooks, and viewing analytics. All requests are scoped to an account under
+    /accounts/{account_id}/stream and authenticate with a Bearer API token. This
+    document grounds the core Stream endpoints; it is not exhaustive of every
+    Cloudflare Stream operation.
+  version: '1.0'
+  contact:
+    name: Cloudflare Stream
+    url: https://developers.cloudflare.com/stream/
+  license:
+    name: Cloudflare Website and Online Services Terms of Use
+    url: https://www.cloudflare.com/terms/
+servers:
+  - url: https://api.cloudflare.com/client/v4
+    description: Cloudflare API v4
+security:
+  - bearerAuth: []
+tags:
+  - name: Videos
+    description: On-demand video upload, storage, encoding, and management.
+  - name: Live Inputs
+    description: Live inputs receiving RTMPS or SRT broadcasts, plus simulcast outputs.
+  - name: Captions
+    description: Per-language captions and subtitles for a video.
+  - name: Signed URLs
+    description: Signing keys and per-video signed playback tokens.
+  - name: Webhooks
+    description: The single per-account webhook for video processing notifications.
+  - name: Analytics
+    description: Account storage usage and viewing analytics.
+paths:
+  /accounts/{account_id}/stream:
+    get:
+      operationId: listVideos
+      tags:
+        - Videos
+      summary: List videos
+      description: Lists up to 1,000 videos from a single request, with optional filtering.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: A list of videos.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: uploadVideoTus
+      tags:
+        - Videos
+      summary: Initiate a TUS resumable upload
+      description: >-
+        Initiates a TUS resumable video upload. The Tus-Resumable, Upload-Length,
+        and Upload-Metadata headers are used to negotiate the upload; the response
+        returns a stream-media-id and a location to PATCH chunks to.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '201':
+          description: The upload session was created.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /accounts/{account_id}/stream/{identifier}:
+    get:
+      operationId: getVideoDetails
+      tags:
+        - Videos
+      summary: Retrieve video details
+      description: Fetches details for a single video by its identifier (uid).
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: The video details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: editVideo
+      tags:
+        - Videos
+      summary: Edit video details
+      description: Edits video metadata such as name, requireSignedURLs, and allowedOrigins.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: The updated video details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoResponse'
+    delete:
+      operationId: deleteVideo
+      tags:
+        - Videos
+      summary: Delete a video
+      description: Deletes a video and removes it from storage and delivery.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: The video was deleted.
+  /accounts/{account_id}/stream/direct_upload:
+    post:
+      operationId: createDirectUpload
+      tags:
+        - Videos
+      summary: Create a direct creator upload
+      description: >-
+        Creates a one-time upload URL that a client or end user can upload a video
+        to directly, without exposing your API token.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maxDurationSeconds:
+                  type: integer
+      responses:
+        '200':
+          description: A one-time upload URL and video uid.
+  /accounts/{account_id}/stream/copy:
+    post:
+      operationId: copyVideoFromUrl
+      tags:
+        - Videos
+      summary: Upload a video from a URL
+      description: Fetches and ingests a video from a publicly accessible URL.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+      responses:
+        '200':
+          description: The created video.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoResponse'
+  /accounts/{account_id}/stream/clip:
+    post:
+      operationId: clipVideo
+      tags:
+        - Videos
+      summary: Clip a video
+      description: Creates a new clipped video from a start and end time of an existing video.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clippedFromVideoUID:
+                  type: string
+                startTimeSeconds:
+                  type: integer
+                endTimeSeconds:
+                  type: integer
+      responses:
+        '200':
+          description: The created clip.
+  /accounts/{account_id}/stream/storage-usage:
+    get:
+      operationId: getStorageUsage
+      tags:
+        - Analytics
+      summary: Get account storage usage
+      description: Returns the total minutes of video stored and the storage limit for the account.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Storage usage totals.
+  /accounts/{account_id}/stream/{identifier}/audio:
+    get:
+      operationId: listAudioTracks
+      tags:
+        - Videos
+      summary: List additional audio tracks
+      description: Lists the additional audio tracks attached to a video.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: A list of audio tracks.
+  /accounts/{account_id}/stream/{identifier}/audio/copy:
+    post:
+      operationId: addAudioTrack
+      tags:
+        - Videos
+      summary: Add an audio track from a URL
+      description: Adds an additional audio track to a video by copying it from a URL.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                label:
+                  type: string
+      responses:
+        '200':
+          description: The added audio track.
+  /accounts/{account_id}/stream/live_inputs:
+    get:
+      operationId: listLiveInputs
+      tags:
+        - Live Inputs
+      summary: List live inputs
+      description: Lists all live inputs on the account.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: A list of live inputs.
+    post:
+      operationId: createLiveInput
+      tags:
+        - Live Inputs
+      summary: Create a live input
+      description: >-
+        Creates a live input that can receive a broadcast over RTMPS or SRT and
+        deliver it live and as a recording.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiveInputInput'
+      responses:
+        '200':
+          description: The created live input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiveInputResponse'
+  /accounts/{account_id}/stream/live_inputs/{live_input_identifier}:
+    get:
+      operationId: getLiveInput
+      tags:
+        - Live Inputs
+      summary: Retrieve a live input
+      description: Fetches details, connection status, and RTMPS/SRT credentials for a live input.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/LiveInputIdentifier'
+      responses:
+        '200':
+          description: The live input details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiveInputResponse'
+    put:
+      operationId: updateLiveInput
+      tags:
+        - Live Inputs
+      summary: Update a live input
+      description: Updates the configuration of an existing live input.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/LiveInputIdentifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LiveInputInput'
+      responses:
+        '200':
+          description: The updated live input.
+    delete:
+      operationId: deleteLiveInput
+      tags:
+        - Live Inputs
+      summary: Delete a live input
+      description: Deletes a live input.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/LiveInputIdentifier'
+      responses:
+        '200':
+          description: The live input was deleted.
+  /accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs:
+    get:
+      operationId: listOutputs
+      tags:
+        - Live Inputs
+      summary: List simulcast outputs
+      description: Lists the simulcast (restreaming) outputs configured on a live input.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/LiveInputIdentifier'
+      responses:
+        '200':
+          description: A list of outputs.
+    post:
+      operationId: createOutput
+      tags:
+        - Live Inputs
+      summary: Create a simulcast output
+      description: >-
+        Creates a simulcast output that restreams the live input to another RTMP or
+        SRT destination, such as YouTube or Twitch.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/LiveInputIdentifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                streamKey:
+                  type: string
+      responses:
+        '200':
+          description: The created output.
+  /accounts/{account_id}/stream/live_inputs/{live_input_identifier}/outputs/{output_identifier}:
+    put:
+      operationId: updateOutput
+      tags:
+        - Live Inputs
+      summary: Update a simulcast output
+      description: Enables or disables a simulcast output.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/LiveInputIdentifier'
+        - $ref: '#/components/parameters/OutputIdentifier'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+      responses:
+        '200':
+          description: The updated output.
+    delete:
+      operationId: deleteOutput
+      tags:
+        - Live Inputs
+      summary: Delete a simulcast output
+      description: Deletes a simulcast output from a live input.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/LiveInputIdentifier'
+        - $ref: '#/components/parameters/OutputIdentifier'
+      responses:
+        '200':
+          description: The output was deleted.
+  /accounts/{account_id}/stream/{identifier}/captions:
+    get:
+      operationId: listCaptions
+      tags:
+        - Captions
+      summary: List captions
+      description: Lists the available caption and subtitle languages for a video.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+      responses:
+        '200':
+          description: A list of captions.
+  /accounts/{account_id}/stream/{identifier}/captions/{language}:
+    get:
+      operationId: getCaption
+      tags:
+        - Captions
+      summary: Get caption details for a language
+      description: Fetches the caption entry for a specific BCP 47 language tag.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+        - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The caption details.
+    put:
+      operationId: uploadCaption
+      tags:
+        - Captions
+      summary: Upload captions for a language
+      description: Uploads a caption or subtitle file for a language via multipart/form-data.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+        - $ref: '#/components/parameters/Language'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: The uploaded caption.
+    delete:
+      operationId: deleteCaption
+      tags:
+        - Captions
+      summary: Delete captions for a language
+      description: Deletes the captions for a language from a video.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+        - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The captions were deleted.
+  /accounts/{account_id}/stream/{identifier}/captions/{language}/generate:
+    post:
+      operationId: generateCaption
+      tags:
+        - Captions
+      summary: Generate captions with AI
+      description: Automatically generates captions for a language using AI transcription.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+        - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The generation job was accepted.
+  /accounts/{account_id}/stream/{identifier}/captions/{language}/vtt:
+    get:
+      operationId: getCaptionVtt
+      tags:
+        - Captions
+      summary: Get captions as WebVTT
+      description: Returns the captions for a language in WebVTT format.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+        - $ref: '#/components/parameters/Language'
+      responses:
+        '200':
+          description: The WebVTT caption file.
+          content:
+            text/vtt:
+              schema:
+                type: string
+  /accounts/{account_id}/stream/keys:
+    get:
+      operationId: listSigningKeys
+      tags:
+        - Signed URLs
+      summary: List signing keys
+      description: Lists the signing key IDs available on the account.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: A list of signing keys.
+    post:
+      operationId: createSigningKey
+      tags:
+        - Signed URLs
+      summary: Create a signing key
+      description: >-
+        Creates an RSA signing key used to generate signed URL tokens, returning
+        base64-encoded pem and jwk values. Up to 1,000 keys per account.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: The created signing key.
+  /accounts/{account_id}/stream/keys/{key_id}:
+    delete:
+      operationId: deleteSigningKey
+      tags:
+        - Signed URLs
+      summary: Delete a signing key
+      description: Revokes a signing key, invalidating all tokens created with it.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - name: key_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The signing key was deleted.
+  /accounts/{account_id}/stream/{identifier}/token:
+    post:
+      operationId: createSignedToken
+      tags:
+        - Signed URLs
+      summary: Create a signed URL token
+      description: >-
+        Mints a signed URL token for a video, expiring in one hour by default, with
+        optional access rules such as expiry, allowed origins, and IP restrictions.
+        Does not support Live WebRTC playback.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+        - $ref: '#/components/parameters/Identifier'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                exp:
+                  type: integer
+                nbf:
+                  type: integer
+                downloadable:
+                  type: boolean
+      responses:
+        '200':
+          description: The signed token.
+  /accounts/{account_id}/stream/webhook:
+    get:
+      operationId: getWebhook
+      tags:
+        - Webhooks
+      summary: View webhook
+      description: Retrieves the current per-account webhook subscription.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: The webhook subscription.
+    put:
+      operationId: createWebhook
+      tags:
+        - Webhooks
+      summary: Create or update the webhook
+      description: >-
+        Subscribes the single per-account webhook. Stream POSTs a signed
+        notification to the configured URL when a video finishes processing or
+        enters an error state.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notificationUrl:
+                  type: string
+      responses:
+        '200':
+          description: The webhook subscription, including the signing secret.
+    delete:
+      operationId: deleteWebhook
+      tags:
+        - Webhooks
+      summary: Delete the webhook
+      description: Deletes the per-account webhook subscription.
+      parameters:
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: The webhook was deleted.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Cloudflare API token passed in an Authorization Bearer header.
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+    Identifier:
+      name: identifier
+      in: path
+      required: true
+      description: The video identifier (uid).
+      schema:
+        type: string
+    LiveInputIdentifier:
+      name: live_input_identifier
+      in: path
+      required: true
+      description: The live input identifier.
+      schema:
+        type: string
+    OutputIdentifier:
+      name: output_identifier
+      in: path
+      required: true
+      description: The simulcast output identifier.
+      schema:
+        type: string
+    Language:
+      name: language
+      in: path
+      required: true
+      description: The BCP 47 language tag (for example, en or tr).
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API token is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
+  schemas:
+    VideoResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Video'
+        success:
+          type: boolean
+    VideoListResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+        success:
+          type: boolean
+    Video:
+      type: object
+      properties:
+        uid:
+          type: string
+        readyToStream:
+          type: boolean
+        status:
+          type: object
+          properties:
+            state:
+              type: string
+            pctComplete:
+              type: string
+        duration:
+          type: number
+        playback:
+          type: object
+          properties:
+            hls:
+              type: string
+            dash:
+              type: string
+        requireSignedURLs:
+          type: boolean
+        preview:
+          type: string
+        thumbnail:
+          type: string
+    LiveInputInput:
+      type: object
+      properties:
+        meta:
+          type: object
+        recording:
+          type: object
+          properties:
+            mode:
+              type: string
+    LiveInputResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/LiveInput'
+        success:
+          type: boolean
+    LiveInput:
+      type: object
+      properties:
+        uid:
+          type: string
+        rtmps:
+          type: object
+          properties:
+            url:
+              type: string
+            streamKey:
+              type: string
+        srt:
+          type: object
+          properties:
+            url:
+              type: string
+            streamId:
+              type: string
+            passphrase:
+              type: string
+        status:
+          type: string
