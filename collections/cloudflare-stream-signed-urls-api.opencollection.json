@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cloudflare Stream Analytics Signed URLs API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Signed URLs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List signing keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/keys",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ]
+          },
+          "docs": "Lists the signing key IDs available on the account."
+        },
+        {
+          "info": {
+            "name": "Create a signing key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/keys",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ]
+          },
+          "docs": "Creates an RSA signing key used to generate signed URL tokens, returning base64-encoded pem and jwk values. Up to 1,000 keys per account."
+        },
+        {
+          "info": {
+            "name": "Delete a signing key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/keys/:key_id",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Revokes a signing key, invalidating all tokens created with it."
+        },
+        {
+          "info": {
+            "name": "Create a signed URL token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/token",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Mints a signed URL token for a video, expiring in one hour by default, with optional access rules such as expiry, allowed origins, and IP restrictions. Does not support Live WebRTC playback."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

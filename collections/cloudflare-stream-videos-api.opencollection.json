@@ -1,0 +1,264 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cloudflare Stream Analytics Videos API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Videos",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List videos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ]
+          },
+          "docs": "Lists up to 1,000 videos from a single request, with optional filtering."
+        },
+        {
+          "info": {
+            "name": "Initiate a TUS resumable upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ]
+          },
+          "docs": "Initiates a TUS resumable video upload. The Tus-Resumable, Upload-Length, and Upload-Metadata headers are used to negotiate the upload; the response returns a stream-media-id and a location to PATCH chunks to."
+        },
+        {
+          "info": {
+            "name": "Retrieve video details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              }
+            ]
+          },
+          "docs": "Fetches details for a single video by its identifier (uid)."
+        },
+        {
+          "info": {
+            "name": "Edit video details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edits video metadata such as name, requireSignedURLs, and allowedOrigins."
+        },
+        {
+          "info": {
+            "name": "Delete a video",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              }
+            ]
+          },
+          "docs": "Deletes a video and removes it from storage and delivery."
+        },
+        {
+          "info": {
+            "name": "Create a direct creator upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/direct_upload",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a one-time upload URL that a client or end user can upload a video to directly, without exposing your API token."
+        },
+        {
+          "info": {
+            "name": "Upload a video from a URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/copy",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Fetches and ingests a video from a publicly accessible URL."
+        },
+        {
+          "info": {
+            "name": "Clip a video",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/clip",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new clipped video from a start and end time of an existing video."
+        },
+        {
+          "info": {
+            "name": "List additional audio tracks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/audio",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              }
+            ]
+          },
+          "docs": "Lists the additional audio tracks attached to a video."
+        },
+        {
+          "info": {
+            "name": "Add an audio track from a URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/audio/copy",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds an additional audio track to a video by copying it from a URL."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

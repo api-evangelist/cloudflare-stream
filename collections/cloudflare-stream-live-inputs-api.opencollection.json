@@ -1,0 +1,265 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cloudflare Stream Analytics Live Inputs API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Live Inputs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List live inputs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ]
+          },
+          "docs": "Lists all live inputs on the account."
+        },
+        {
+          "info": {
+            "name": "Create a live input",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a live input that can receive a broadcast over RTMPS or SRT and deliver it live and as a recording."
+        },
+        {
+          "info": {
+            "name": "Retrieve a live input",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs/:live_input_identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "live_input_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The live input identifier."
+              }
+            ]
+          },
+          "docs": "Fetches details, connection status, and RTMPS/SRT credentials for a live input."
+        },
+        {
+          "info": {
+            "name": "Update a live input",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs/:live_input_identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "live_input_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The live input identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the configuration of an existing live input."
+        },
+        {
+          "info": {
+            "name": "Delete a live input",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs/:live_input_identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "live_input_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The live input identifier."
+              }
+            ]
+          },
+          "docs": "Deletes a live input."
+        },
+        {
+          "info": {
+            "name": "List simulcast outputs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs/:live_input_identifier/outputs",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "live_input_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The live input identifier."
+              }
+            ]
+          },
+          "docs": "Lists the simulcast (restreaming) outputs configured on a live input."
+        },
+        {
+          "info": {
+            "name": "Create a simulcast output",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs/:live_input_identifier/outputs",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "live_input_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The live input identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a simulcast output that restreams the live input to another RTMP or SRT destination, such as YouTube or Twitch."
+        },
+        {
+          "info": {
+            "name": "Update a simulcast output",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs/:live_input_identifier/outputs/:output_identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "live_input_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The live input identifier."
+              },
+              {
+                "name": "output_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The simulcast output identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enables or disables a simulcast output."
+        },
+        {
+          "info": {
+            "name": "Delete a simulcast output",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/live_inputs/:live_input_identifier/outputs/:output_identifier",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "live_input_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The live input identifier."
+              },
+              {
+                "name": "output_identifier",
+                "value": "",
+                "type": "path",
+                "description": "The simulcast output identifier."
+              }
+            ]
+          },
+          "docs": "Deletes a simulcast output from a live input."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

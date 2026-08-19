@@ -1,0 +1,214 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cloudflare Stream Analytics Captions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Captions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List captions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/captions",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              }
+            ]
+          },
+          "docs": "Lists the available caption and subtitle languages for a video."
+        },
+        {
+          "info": {
+            "name": "Get caption details for a language",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/captions/:language",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "path",
+                "description": "The BCP 47 language tag (for example, en or tr)."
+              }
+            ]
+          },
+          "docs": "Fetches the caption entry for a specific BCP 47 language tag."
+        },
+        {
+          "info": {
+            "name": "Upload captions for a language",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/captions/:language",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "path",
+                "description": "The BCP 47 language tag (for example, en or tr)."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Uploads a caption or subtitle file for a language via multipart/form-data."
+        },
+        {
+          "info": {
+            "name": "Delete captions for a language",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/captions/:language",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "path",
+                "description": "The BCP 47 language tag (for example, en or tr)."
+              }
+            ]
+          },
+          "docs": "Deletes the captions for a language from a video."
+        },
+        {
+          "info": {
+            "name": "Generate captions with AI",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/captions/:language/generate",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "path",
+                "description": "The BCP 47 language tag (for example, en or tr)."
+              }
+            ]
+          },
+          "docs": "Automatically generates captions for a language using AI transcription."
+        },
+        {
+          "info": {
+            "name": "Get captions as WebVTT",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cloudflare.com/client/v4/accounts/:account_id/stream/:identifier/captions/:language/vtt",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The Cloudflare account identifier."
+              },
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "The video identifier (uid)."
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "path",
+                "description": "The BCP 47 language tag (for example, en or tr)."
+              }
+            ]
+          },
+          "docs": "Returns the captions for a language in WebVTT format."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
