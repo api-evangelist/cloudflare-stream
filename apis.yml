@@ -13,6 +13,18 @@ description: Cloudflare Stream is the video streaming, hosting, and live-video p
   API is served under https://api.cloudflare.com/client/v4/accounts/{account_id}/stream
   and authenticates with a Bearer API token. Billed at $5 per 1,000 minutes of video
   stored and $1 per 1,000 minutes delivered.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: self-serve
