@@ -1,0 +1,48 @@
+slug: cloudflare-stream
+provider: Cloudflare Stream
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Media, Entertainment & Telecom Content
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Videos
+  spec_file: cloudflare-stream-videos-api-openapi.yml
+  capability_id: BC-3710
+  capability_id_l1: BC-3710
+  capability_name: Media Asset Management
+  confidence: 0.82
+  evidence: '"Initiate a TUS resumable upload", "Edit video details", "Clip a video", "Add an audio track
+    from a URL"'
+  reason: Surface manages the lifecycle of stored video assets — ingest/upload, metadata edit, clipping,
+    additional audio tracks — which is media asset management. Spans ingest, versioning and metadata so
+    no single L2 is named cleanly.
+- tag: Captions
+  spec_file: cloudflare-stream-captions-api-openapi.yml
+  capability_id: BC-3700.60
+  capability_id_l1: BC-3700
+  capability_name: Localisation & Versioning Management
+  confidence: 0.8
+  evidence: PUT /accounts/{account_id}/stream/{identifier}/captions/{language}  uploadCaption  Upload
+    captions for a language ... POST .../captions/{language}/generate  generateCaption  Generate captions
+    with AI
+  reason: Operations upload, generate, retrieve (WebVTT) and delete per-language caption tracks for a
+    video asset — subtitling/captioning work, which the frame places under Localisation & Versioning Management.
+    Accessibility compliance is an alternate reading, hence 0.8 rather than 0.95.
+- tag: Live Inputs
+  spec_file: cloudflare-stream-live-inputs-api-openapi.yml
+  capability_id: BC-3740.20
+  capability_id_l1: BC-3740
+  capability_name: OTT & Streaming Delivery
+  confidence: 0.78
+  evidence: '"Create a live input", "List simulcast outputs"; "live inputs over RTMPS and SRT"'
+  reason: Operations provision live ingest endpoints and simulcast (restream) outputs for live video delivery
+    — streaming origin/live streaming operations, i.e. OTT & Streaming Delivery. Not asset cataloguing;
+    these objects are delivery pipeline endpoints.

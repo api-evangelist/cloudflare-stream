@@ -293,6 +293,9 @@ apis:
   - type: APIReference
     url: https://developers.cloudflare.com/analytics/graphql-api/
 common:
+- type: CapabilityMap
+  url: capabilities/cloudflare-stream-capability-edges.yml
+  name: Cloudflare Stream Business Capability Map
 - type: AgenticAccess
   url: agentic-access/cloudflare-stream-agentic-access.yml
 - type: VulnerabilityDisclosure
