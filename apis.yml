@@ -217,6 +217,8 @@ apis:
   humanURL: https://developers.cloudflare.com/api/resources/stream/
   baseURL: https://api.cloudflare.com/client/v4
   tags:
+  - Video
+  tags_raw:
   - Videos
   properties:
   - type: OpenAPI
