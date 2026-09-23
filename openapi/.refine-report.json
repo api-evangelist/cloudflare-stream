@@ -1,12 +1,7 @@
 {
   "provider": "cloudflare-stream",
   "sources": [
-    "cloudflare-stream-analytics-api-openapi.yml",
-    "cloudflare-stream-captions-api-openapi.yml",
-    "cloudflare-stream-live-inputs-api-openapi.yml",
-    "cloudflare-stream-signed-urls-api-openapi.yml",
-    "cloudflare-stream-videos-api-openapi.yml",
-    "cloudflare-stream-webhooks-api-openapi.yml"
+    "_original/cloudflare-stream-openapi.yml"
   ],
   "outputs": [
     "cloudflare-stream-analytics-api-openapi.yml",
@@ -19,6 +14,17 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "cloudflare-stream-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "cloudflare-stream-analytics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloudflare-stream-captions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloudflare-stream-live-inputs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloudflare-stream-signed-urls-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloudflare-stream-videos-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cloudflare-stream-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

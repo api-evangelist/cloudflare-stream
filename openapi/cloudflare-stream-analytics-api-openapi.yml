@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Cloudflare Stream Analytics API
-  description: Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare. A single REST API uploads, stores, encodes, and delivers on-demand and live video across Cloudflare's global network, with a built-in adaptive-bitrate player, HLS/DASH manifests, live inputs over RTMPS and SRT, AI-generated and uploaded captions, signed-URL access control, per-account webhooks, and viewing analytics. All requests are scoped to an account under /accounts/{account_id}/stream and authenticate with a Bearer API token. This document grounds the core Stream endpoints; it is not exhaustive of every Cloudflare Stream operation.
+  description: Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare.
   version: '1.0'
   contact:
     name: Cloudflare Stream
