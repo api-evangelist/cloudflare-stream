@@ -211,7 +211,31 @@ paths:
         '200':
           description: The added audio track.
 components:
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+    Identifier:
+      name: identifier
+      in: path
+      required: true
+      description: The video identifier (uid).
+      schema:
+        type: string
   schemas:
+    VideoListResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+        success:
+          type: boolean
     VideoResponse:
       type: object
       properties:
@@ -248,35 +272,11 @@ components:
           type: string
         thumbnail:
           type: string
-    VideoListResponse:
-      type: object
-      properties:
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Video'
-        success:
-          type: boolean
-  parameters:
-    Identifier:
-      name: identifier
-      in: path
-      required: true
-      description: The video identifier (uid).
-      schema:
-        type: string
-    AccountId:
-      name: account_id
-      in: path
-      required: true
-      description: The Cloudflare account identifier.
-      schema:
-        type: string
   responses:
-    Unauthorized:
-      description: Authentication failed or the API token is missing or invalid.
     NotFound:
       description: The requested resource was not found.
+    Unauthorized:
+      description: Authentication failed or the API token is missing or invalid.
   securitySchemes:
     bearerAuth:
       type: http

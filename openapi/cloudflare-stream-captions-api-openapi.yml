@@ -115,13 +115,6 @@ paths:
                 type: string
 components:
   parameters:
-    AccountId:
-      name: account_id
-      in: path
-      required: true
-      description: The Cloudflare account identifier.
-      schema:
-        type: string
     Language:
       name: language
       in: path
@@ -134,6 +127,13 @@ components:
       in: path
       required: true
       description: The video identifier (uid).
+      schema:
+        type: string
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
       schema:
         type: string
   securitySchemes:
