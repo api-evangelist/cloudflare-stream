@@ -211,6 +211,11 @@ paths:
         '200':
           description: The added audio track.
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API token is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
   parameters:
     AccountId:
       name: account_id
@@ -272,11 +277,6 @@ components:
           type: string
         thumbnail:
           type: string
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-    Unauthorized:
-      description: Authentication failed or the API token is missing or invalid.
   securitySchemes:
     bearerAuth:
       type: http
