@@ -115,18 +115,18 @@ paths:
                 type: string
 components:
   parameters:
-    AccountId:
-      name: account_id
-      in: path
-      required: true
-      description: The Cloudflare account identifier.
-      schema:
-        type: string
     Language:
       name: language
       in: path
       required: true
       description: The BCP 47 language tag (for example, en or tr).
+      schema:
+        type: string
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
       schema:
         type: string
     Identifier:

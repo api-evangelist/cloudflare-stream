@@ -172,18 +172,18 @@ paths:
           description: The output was deleted.
 components:
   parameters:
-    AccountId:
-      name: account_id
-      in: path
-      required: true
-      description: The Cloudflare account identifier.
-      schema:
-        type: string
     OutputIdentifier:
       name: output_identifier
       in: path
       required: true
       description: The simulcast output identifier.
+      schema:
+        type: string
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
       schema:
         type: string
     LiveInputIdentifier:
@@ -194,16 +194,6 @@ components:
       schema:
         type: string
   schemas:
-    LiveInputInput:
-      type: object
-      properties:
-        meta:
-          type: object
-        recording:
-          type: object
-          properties:
-            mode:
-              type: string
     LiveInput:
       type: object
       properties:
@@ -234,6 +224,16 @@ components:
           $ref: '#/components/schemas/LiveInput'
         success:
           type: boolean
+    LiveInputInput:
+      type: object
+      properties:
+        meta:
+          type: object
+        recording:
+          type: object
+          properties:
+            mode:
+              type: string
   securitySchemes:
     bearerAuth:
       type: http

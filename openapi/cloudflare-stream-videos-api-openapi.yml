@@ -211,43 +211,7 @@ paths:
         '200':
           description: The added audio track.
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed or the API token is missing or invalid.
-    NotFound:
-      description: The requested resource was not found.
-  parameters:
-    AccountId:
-      name: account_id
-      in: path
-      required: true
-      description: The Cloudflare account identifier.
-      schema:
-        type: string
-    Identifier:
-      name: identifier
-      in: path
-      required: true
-      description: The video identifier (uid).
-      schema:
-        type: string
   schemas:
-    VideoListResponse:
-      type: object
-      properties:
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Video'
-        success:
-          type: boolean
-    VideoResponse:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/Video'
-        success:
-          type: boolean
     Video:
       type: object
       properties:
@@ -277,6 +241,42 @@ components:
           type: string
         thumbnail:
           type: string
+    VideoListResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
+        success:
+          type: boolean
+    VideoResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Video'
+        success:
+          type: boolean
+  responses:
+    Unauthorized:
+      description: Authentication failed or the API token is missing or invalid.
+    NotFound:
+      description: The requested resource was not found.
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+    Identifier:
+      name: identifier
+      in: path
+      required: true
+      description: The video identifier (uid).
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http
