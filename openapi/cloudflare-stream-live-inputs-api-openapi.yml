@@ -171,29 +171,24 @@ paths:
         '200':
           description: The output was deleted.
 components:
-  parameters:
-    OutputIdentifier:
-      name: output_identifier
-      in: path
-      required: true
-      description: The simulcast output identifier.
-      schema:
-        type: string
-    AccountId:
-      name: account_id
-      in: path
-      required: true
-      description: The Cloudflare account identifier.
-      schema:
-        type: string
-    LiveInputIdentifier:
-      name: live_input_identifier
-      in: path
-      required: true
-      description: The live input identifier.
-      schema:
-        type: string
   schemas:
+    LiveInputInput:
+      type: object
+      properties:
+        meta:
+          type: object
+        recording:
+          type: object
+          properties:
+            mode:
+              type: string
+    LiveInputResponse:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/LiveInput'
+        success:
+          type: boolean
     LiveInput:
       type: object
       properties:
@@ -217,23 +212,28 @@ components:
               type: string
         status:
           type: string
-    LiveInputResponse:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/LiveInput'
-        success:
-          type: boolean
-    LiveInputInput:
-      type: object
-      properties:
-        meta:
-          type: object
-        recording:
-          type: object
-          properties:
-            mode:
-              type: string
+  parameters:
+    LiveInputIdentifier:
+      name: live_input_identifier
+      in: path
+      required: true
+      description: The live input identifier.
+      schema:
+        type: string
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      description: The Cloudflare account identifier.
+      schema:
+        type: string
+    OutputIdentifier:
+      name: output_identifier
+      in: path
+      required: true
+      description: The simulcast output identifier.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

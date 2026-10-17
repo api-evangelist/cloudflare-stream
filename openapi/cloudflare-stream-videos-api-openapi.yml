@@ -257,11 +257,6 @@ components:
           $ref: '#/components/schemas/Video'
         success:
           type: boolean
-  responses:
-    Unauthorized:
-      description: Authentication failed or the API token is missing or invalid.
-    NotFound:
-      description: The requested resource was not found.
   parameters:
     AccountId:
       name: account_id
@@ -277,6 +272,11 @@ components:
       description: The video identifier (uid).
       schema:
         type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+    Unauthorized:
+      description: Authentication failed or the API token is missing or invalid.
   securitySchemes:
     bearerAuth:
       type: http
