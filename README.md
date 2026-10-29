@@ -1,4 +1,4 @@
-# Cloudflare Stream (cloudflare-stream)
+# Cloudflare Stream
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,184 +64,130 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare - a single REST API for uploading, storing, encoding, and delivering on-demand and live video across Cloudflare's global network. It handles direct and TUS resumable uploads, copy-from-URL ingest, live inputs over RTMPS and SRT (with simulcast outputs and a WebRTC/WHIP/WHEP live beta), a built-in adaptive-bitrate player with HLS/DASH manifests, AI-generated and uploaded captions, signed-URL access control, per-account webhooks, and viewing analytics.
+Cloudflare Stream is the video streaming, hosting, and live-video product from Cloudflare - a single REST API for uploading, storing, encoding, and delivering on-demand and live video across Cloudflare's global network. It handles direct and TUS resumable uploads, copy-from-URL ingest, live inputs over RTMPS and SRT (with simulcast outputs and WebRTC/WHIP/WHEP beta), a built-in adaptive-bitrate player and HLS/DASH manifests, AI-generated and uploaded captions, signed-URL access control, per-account webhooks, and viewing analytics. This entry documents the Cloudflare Stream product specifically, not the broader Cloudflare platform. The API is served under https://api.cloudflare.com/client/v4/accounts/{account_id}/stream and authenticates with a Bearer API token. Billed at $5 per 1,000 minutes of video stored and $1 per 1,000 minutes delivered.
 
-This entry documents the **Cloudflare Stream product specifically**, not the broader Cloudflare platform (which is catalogued separately under `cloudflare`).
+**Areas:** Video · Streaming · Live Streaming · Media · Video Hosting · Cloudflare
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/cloudflare-stream/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/cloudflare-stream/refs/heads/main/apis.yml)
+## Cloudflare Stream on APIs.io
 
-## Access Model
+Everything profiled for Cloudflare Stream is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cloudflare-stream/](https://apis.io/providers/cloudflare-stream/)** — or go straight to one of the APIs or properties below.
 
-Cloudflare Stream is a proprietary, fully managed Cloudflare service. It is **not open source and is not self-hostable** - the service runs only on Cloudflare's network and requires a Cloudflare account.
+### APIs (6)
 
-- **Base URL:** `https://api.cloudflare.com/client/v4`, with all operations scoped to an account under `/accounts/{account_id}/stream`.
-- **Authentication:** a Cloudflare **API token** passed as an `Authorization: Bearer <token>` header. Tokens are created in the Cloudflare dashboard and scoped with Stream permissions.
-- **Surface:** request/response REST over HTTPS. The only push mechanism is a single per-account **webhook** (outbound HTTP) that fires when a video finishes processing or errors. Video ingest and playback use streaming media protocols (RTMPS, SRT, HLS, DASH) and a WebRTC-based WHIP/WHEP live beta - there is **no documented client WebSocket API**.
+- [Cloudflare Stream Analytics API](https://apis.io/apis/cloudflare-stream/cloudflare-stream-analytics-api/) — Account storage usage and viewing analytics.
+- [Cloudflare Stream Captions API](https://apis.io/apis/cloudflare-stream/cloudflare-stream-captions-api/) — Per-language captions and subtitles for a video.
+- [Cloudflare Stream Live Inputs API](https://apis.io/apis/cloudflare-stream/cloudflare-stream-live-inputs-api/) — Live inputs receiving RTMPS or SRT broadcasts, plus simulcast outputs.
+- [Cloudflare Stream Signed URLs API](https://apis.io/apis/cloudflare-stream/cloudflare-stream-signed-urls-api/) — Signing keys and per-video signed playback tokens.
+- [Cloudflare Stream Videos API](https://apis.io/apis/cloudflare-stream/cloudflare-stream-videos-api/) — On-demand video upload, storage, encoding, and management.
+- [Cloudflare Stream Webhooks API](https://apis.io/apis/cloudflare-stream/cloudflare-stream-webhooks-api/) — The single per-account webhook for video processing notifications.
 
-## Pricing
+### Published properties
 
-Simple usage-based pricing with no per-request API fee:
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- **Storage:** $5 per 1,000 minutes of video stored (prepaid, in increments).
-- **Delivery:** $1 per 1,000 minutes of video delivered / watched (post-paid).
+#### Agentic access (1)
 
-Encoding, the built-in player, and HLS/DASH delivery are included. Live and on-demand video share the same billing model - a live broadcast with no viewers costs nothing to deliver, but recordings count toward stored minutes. See [plans/cloudflare-stream-plans-pricing.yml](plans/cloudflare-stream-plans-pricing.yml).
+Which operations an agent can call, which act, and which need a human in the loop.
 
-## Tags
+- [Cloudflare Stream Agentic Access](https://apis.io/agentic-access/cloudflare-stream/cloudflare-stream-agentic-access/)
 
-- Video
-- Streaming
-- Live Streaming
-- Media
-- Video Hosting
-- Cloudflare
+#### Collections (7)
 
-## Timestamps
+Postman and Open Collection request collections.
 
-- **Created:** 2026-07-11
-- **Modified:** 2026-07-11
+- [Cloudflare Stream API](https://apis.io/collections/cloudflare-stream/open-cloudflare-stream/)
+- [Cloudflare Stream Analytics API](https://apis.io/collections/cloudflare-stream/open-cloudflare-stream-analytics-api/)
+- [Cloudflare Stream Analytics Captions API](https://apis.io/collections/cloudflare-stream/open-cloudflare-stream-captions-api/)
+- [Cloudflare Stream Analytics Live Inputs API](https://apis.io/collections/cloudflare-stream/open-cloudflare-stream-live-inputs-api/)
+- [Cloudflare Stream Analytics Signed URLs API](https://apis.io/collections/cloudflare-stream/open-cloudflare-stream-signed-urls-api/)
+- [Cloudflare Stream Analytics Videos API](https://apis.io/collections/cloudflare-stream/open-cloudflare-stream-videos-api/)
+- [Cloudflare Stream Analytics Webhooks API](https://apis.io/collections/cloudflare-stream/open-cloudflare-stream-webhooks-api/)
 
-## APIs
+#### Security (3)
 
-### Cloudflare Stream Videos API
+Authentication, trust centre, and vulnerability disclosure.
 
-Upload, store, encode, list, edit, and delete on-demand video. Supports direct uploads, TUS resumable uploads, copy-from-URL ingest, one-time direct creator uploads, video clipping, per-video audio tracks, and account storage usage - all under `/accounts/{account_id}/stream`.
+- [Cloudflare Stream Authentication](https://apis.io/security/cloudflare-stream/cloudflare-stream-authentication/)
+- [Cloudflare Stream Domain Security](https://apis.io/security/cloudflare-stream/cloudflare-stream-domain-security/)
+- [Cloudflare Stream Vulnerability Disclosure](https://apis.io/security/cloudflare-stream/cloudflare-stream-vulnerability-disclosure/)
 
-- **Human URL:** [https://developers.cloudflare.com/api/resources/stream/](https://developers.cloudflare.com/api/resources/stream/)
-- **Base URL:** `https://api.cloudflare.com/client/v4`
+#### Plans and pricing (1)
 
-#### Tags
+Published plans, tiers and prices.
 
-- Video
-- Uploads
-- On-Demand
+- [Cloudflare Stream Plans Pricing](https://apis.io/plans/cloudflare-stream/cloudflare-stream-plans-pricing/)
 
-#### Properties
+#### Rate limits (1)
 
-- [Documentation](https://developers.cloudflare.com/stream/)
-- [API Reference](https://developers.cloudflare.com/api/resources/stream/)
-- [Getting Started](https://developers.cloudflare.com/stream/get-started/)
-- [OpenAPI](openapi/cloudflare-stream-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cloudflare-stream.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cloudflare-stream.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published request limits.
 
-### Cloudflare Stream Live Inputs API
+- [Cloudflare Stream Rate Limits](https://apis.io/rate-limits/cloudflare-stream/cloudflare-stream-rate-limits/)
 
-Create and manage live inputs that receive broadcasts over RTMPS or SRT and deliver them live and as recordings. Manage simulcast outputs that restream one input to other RTMP or SRT destinations, under `/accounts/{account_id}/stream/live_inputs`.
+#### FinOps (1)
 
-- **Human URL:** [https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/)
-- **Base URL:** `https://api.cloudflare.com/client/v4`
+What the API costs to run, by operation.
 
-#### Tags
+- [Cloudflare Stream Finops](https://apis.io/finops/cloudflare-stream/cloudflare-stream-finops/)
 
-- Live Streaming
-- RTMPS
-- SRT
+## Where to find this API
 
-#### Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- [Documentation](https://developers.cloudflare.com/stream/stream-live/)
-- [API Reference](https://developers.cloudflare.com/api/resources/stream/subresources/live_inputs/)
-- [OpenAPI](openapi/cloudflare-stream-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cloudflare-stream.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cloudflare-stream.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Cloudflare Stream Captions API
-
-List, upload, AI-generate, retrieve (including WebVTT), and delete per-language captions and subtitles for a video, keyed by BCP 47 language tag, under `/accounts/{account_id}/stream/{identifier}/captions`.
-
-- **Human URL:** [https://developers.cloudflare.com/api/resources/stream/subresources/captions/](https://developers.cloudflare.com/api/resources/stream/subresources/captions/)
-- **Base URL:** `https://api.cloudflare.com/client/v4`
-
-#### Tags
-
-- Captions
-- Subtitles
-- Accessibility
-
-#### Properties
-
-- [Documentation](https://developers.cloudflare.com/stream/edit-videos/adding-captions/)
-- [API Reference](https://developers.cloudflare.com/api/resources/stream/subresources/captions/)
-- [OpenAPI](openapi/cloudflare-stream-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cloudflare-stream.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cloudflare-stream.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Cloudflare Stream Signed URLs API
-
-Restrict playback with signed URLs. Create and revoke RSA signing keys (up to 1,000 per account) under `/accounts/{account_id}/stream/keys`, and mint per-video signed tokens via `POST /accounts/{account_id}/stream/{identifier}/token` with configurable expiry and access rules.
-
-- **Human URL:** [https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)
-- **Base URL:** `https://api.cloudflare.com/client/v4`
-
-#### Tags
-
-- Signed URLs
-- Access Control
-- Security
-
-#### Properties
-
-- [Documentation](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)
-- [API Reference](https://developers.cloudflare.com/api/resources/stream/subresources/keys/)
-- [OpenAPI](openapi/cloudflare-stream-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cloudflare-stream.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cloudflare-stream.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Cloudflare Stream Webhooks API
-
-Subscribe, view, and delete the single per-account webhook that Stream calls when a video finishes processing or enters an error state. Notifications are signed with a secret and carry `uid`, `readyToStream`, and `status` fields, under `/accounts/{account_id}/stream/webhook`.
-
-- **Human URL:** [https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/](https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/)
-- **Base URL:** `https://api.cloudflare.com/client/v4`
-
-#### Tags
-
-- Webhooks
-- Events
-- Notifications
-
-#### Properties
-
-- [Documentation](https://developers.cloudflare.com/stream/manage-video-library/using-webhooks/)
-- [API Reference](https://developers.cloudflare.com/api/resources/stream/subresources/webhooks/)
-- [OpenAPI](openapi/cloudflare-stream-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cloudflare-stream.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cloudflare-stream.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Cloudflare Stream Analytics API
-
-Measure minutes viewed and stored. Read account video storage usage via `GET /accounts/{account_id}/stream/storage-usage`, and query rich viewing analytics (minutes viewed, by video, country, and time) through the Cloudflare GraphQL Analytics API stream datasets.
-
-- **Human URL:** [https://developers.cloudflare.com/stream/getting-analytics/](https://developers.cloudflare.com/stream/getting-analytics/)
-- **Base URL:** `https://api.cloudflare.com/client/v4`
-
-#### Tags
-
-- Analytics
-- Reporting
-- Usage
-
-#### Properties
-
-- [Documentation](https://developers.cloudflare.com/stream/getting-analytics/)
-- [API Reference](https://developers.cloudflare.com/analytics/graphql-api/)
-- [OpenAPI](openapi/cloudflare-stream-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cloudflare-stream.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cloudflare-stream.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [LinkedIn](https://www.linkedin.com/company/cloudflare)
 - [Website](https://www.cloudflare.com/products/cloudflare-stream/)
 - [Documentation](https://developers.cloudflare.com/stream/)
-- [Plans](plans/cloudflare-stream-plans-pricing.yml)
-- [Rate Limits](rate-limits/cloudflare-stream-rate-limits.yml)
-- [Fin Ops](finops/cloudflare-stream-finops.yml)
-- [GitHub Organization](https://github.com/cloudflare)
 - [Pricing](https://developers.cloudflare.com/stream/pricing/)
+- [Blog](https://blog.cloudflare.com/rss/)
+- [GitHub](https://github.com/cloudflare)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 34.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 47.8 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 44.0 |
+| Access clarity | 18.4 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 17.6** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cloudflare-stream/](https://apis.io/providers/cloudflare-stream/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cloudflare Stream: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cloudflare-stream/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
